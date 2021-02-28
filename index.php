@@ -1,12 +1,14 @@
 <?php
+require_once 'inc/functions.php';
+require_once 'inc/headers.php';
 
-echo header('Access-Control-Allow-Origin: *');
-echo header('Content-type: application/json');
-
-$db = new PDO('mysql:host=localhost;port=3306;dbname=shoppinglist;charset=utf8','root','');
-$sql = "select * from item";
-$query = $db->query($sql);
-$results = $query->fetchAll(PDO::FETCH_ASSOC);
-
-echo header('HTTP/1.1 200 OK');
-echo json_encode($results);
+try {
+    echo header('HTTP/1.1 200 OK');
+    $db = openDB();
+    $sql = "select * from item";
+    $query = $db->query($sql);
+    $results = $query->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($results);
+} catch (PDOException $pdoex) {
+    returnError($pdoex);
+}
